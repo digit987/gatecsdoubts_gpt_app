@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <h1>Post any Computer Science Subject Question and Clear You Doubt. <br> Helpful for GATE Exam!!!</h1>
+    
+  </head>
+  <body>
+    <script>
+    function makeApiCall() {
+  const userInput = document.getElementById('userInput').value;
+  const outputElement = document.getElementById('output');
+
+  const apiKey = ''; // Replace with your OpenAI API key
+  const apiUrl = 'https://api.openai.com/v1/chat/completions';
+
+  const requestOptions = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({
+    "model": "gpt-3.5-turbo",
+    "messages": [{"role": "user", "content": userInput}],
+    "temperature": 1,
+    "max_tokens": 1000,
+    "top_p": 1,
+    "frequency_penalty": 0,
+    "presence_penalty": 0
+    }),
+  };
+
+  fetch(apiUrl, requestOptions)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(response => {
+      outputElement.textContent = `${response['choices'][0]['message']['content']}`;
+    })
+    .catch(error => {
+      console.error('API Error:', error.message);
+      outputElement.textContent = "Sorry! Some Error Occurred";
+    });
+}
+
+    </script>
+
+    <label for="userInput">Enter your Question:</label>
+    <input type="text" id="userInput" />
+    <button onclick="makeApiCall()">Check Answer</button>
+    <div id="output"></div>
+    
+  </body>
+</html>
